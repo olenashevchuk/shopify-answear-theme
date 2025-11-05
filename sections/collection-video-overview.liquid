@@ -1,9 +1,16 @@
 {% if section.settings.show_video_overview %}
   {% assign current_collection_sources = collection.metafields.custom.videooverview.value.sources %}
+
+  {% assign parent_collection = collection.metafields.custom.parent_collection.value.handle %}
+  {% assign parent_collection_sources = collections[parent_collection].metafields.custom.videooverview.value.sources %}
+
   {% assign root_collection = collection.metafields.custom.root_collection.value.handle %}
   {% assign root_collection_sources = collections[root_collection].metafields.custom.videooverview.value.sources %}
 
-  {% assign sources = current_collection_sources | default: root_collection_sources %}
+  {% assign sources = current_collection_sources
+    | default: parent_collection_sources
+    | default: root_collection_sources
+  %}
 
   {% if sources %}
     <div class="collection-video-wrapper">
