@@ -1,0 +1,44 @@
+{% if section.settings.show_video_overview %}
+  {% assign current_collection_sources = collection.metafields.custom.videooverview.value.sources %}
+  {% assign root_collection = collection.metafields.custom.root_collection.value.handle %}
+  {% assign root_collection_sources = collections[root_collection].metafields.custom.videooverview.value.sources %}
+
+  {% assign sources = current_collection_sources | default: root_collection_sources %}
+
+  {% if sources %}
+    <div class="collection-video-wrapper">
+      <video autoplay muted loop>
+        {% for source in sources %}
+          <source src="{{ source.url }}" type="{{  source.mime_type }}">
+        {% endfor %}
+      </video>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collection video overview",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_video_overview",
+      "label": "Show collection video overview"
+    }
+  ]
+}
+{% endschema %}
+<style>
+  .collection-video-wrapper {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+    background-color: #979797;
+  }
+  .collection-video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>
