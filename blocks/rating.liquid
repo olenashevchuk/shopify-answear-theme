@@ -19,7 +19,7 @@
 
     <span>{{ product_rating }}</span>
     {% if show_number_of_rating %}
-      <span>({{ number_of_rating }})</span>
+      <span>({{ number_of_rating | default: 0 }})</span>
     {% endif %}
   </div>
 {% endif %}
