@@ -11,28 +11,95 @@
   "type": "header",
   "name": "Header",
   "sections": {
-    "header_announcements_9jGBFp": {
-      "type": "header-announcements",
+    // "header_announcements_9jGBFp": {
+    //   "type": "header-announcements",
+    //   "blocks": {
+    //     "announcement_BxgCk9": {
+    //       "type": "_announcement",
+    //       "settings": {
+    //         "text": "Welcome to our store",
+    //         "link": "",
+    //         "font": "var(--font-subheading--family)",
+    //         "font_size": "0.75rem",
+    //         "weight": "",
+    //         "letter_spacing": "normal",
+    //         "case": "none"
+    //       },
+    //       "blocks": {}
+    //     }
+    //   },
+    //   "block_order": ["announcement_BxgCk9"],
+    //   "name": "t:names.announcement_bar",
+    //   "settings": {
+    //     "speed": 5,
+    //     "section_width": "page-width",
+    //     "color_scheme": "scheme-1",
+    //     "divider_width": 1,
+    //     "padding-block-start": 15,
+    //     "padding-block-end": 15
+    //   }
+    // },
+    "header_announcements_v2": {
+      "type": "header-announcements-v2",
       "blocks": {
         "announcement_BxgCk9": {
           "type": "_announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "Free shipping!",
             "link": "",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "weight": "",
             "letter_spacing": "normal",
             "case": "none"
-          },
-          "blocks": {}
+          }
+        },
+        "announcement_2": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Winter Sale - Up to 30% Off!",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          }
+        },
+        "announcement_3": {
+          "type": "_announcement",
+          "settings": {
+            "text": "New Arrivals Just In!",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          }
+        },
+        "announcement_4": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Subscribe to our Newsletter",
+            "link": "",
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          }
         }
       },
       "block_order": [
-        "announcement_BxgCk9"
+        "announcement_BxgCk9",
+        "announcement_2",
+        "announcement_3",
+        "announcement_4"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
+        "background": "red",
         "speed": 5,
         "section_width": "page-width",
         "color_scheme": "scheme-1",
@@ -111,8 +178,5 @@
       }
     }
   },
-  "order": [
-    "header_announcements_9jGBFp",
-    "header_section"
-  ]
+  "order": ["header_announcements_v2", "header_section"]
 }
