@@ -1,0 +1,74 @@
+{% if block.settings.show_rating %}
+  {%- liquid
+    assign product_resource = closest.product
+    assign product_rating = product_resource.metafields.custom.rating
+    assign number_of_rating = product_resource.metafields.custom.number_of_rating
+
+    assign stars_background = block.settings.stars_background
+    assign show_number_of_rating = block.settings.show_number_of_rating
+  -%}
+  <div class="product-rating">
+    <div class="stars-wrapper">
+      {% for i in (1..5) %}
+        <svg viewBox="0 0 32 32" width="16" height="16">
+          <path d="M28.61,11.67H20l-2.66-8.2a1.39,1.39,0,0,0-2.64,0L12,11.67H3.39a1.39,1.39,0,0,0-.82,2.51l7,5.07L6.89,27.46a1.39,1.39,0,0,0,1.32,1.82A1.43,1.43,0,0,0,9,29l7-5.07L23,29a1.43,1.43,0,0,0,.81.27,1.39,1.39,0,0,0,1.32-1.82l-2.66-8.21,7-5.07A1.39,1.39,0,0,0,28.61,11.67Z"
+             stroke="{{ stars_background }}"  stroke-width="1.2" fill="{% if i <= product_rating %}{{ stars_background }}{% else %}none{% endif %}"/>
+        </svg>
+      {% endfor -%}
+    </div>
+
+    <span>{{ product_rating }}</span>
+    {% if show_number_of_rating %}
+      <span>({{ number_of_rating }})</span>
+    {% endif %}
+  </div>
+{% endif %}
+{% # theme-check-disable %}
+{% stylesheet %}
+  .product-rating {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .stars-wrapper {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.product_rating",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "t:settings.show_rating",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "stars_background",
+      "label": "t:settings.stars_background",
+      "default": "#D27222",
+      "visible_if": "{{ block.settings.show_rating == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_number_of_rating",
+      "label": "t:settings.show_number_of_rating",
+      "default": true,
+      "visible_if": "{{ block.settings.show_rating == true }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.product_price",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
+{% # theme-check-enable %}

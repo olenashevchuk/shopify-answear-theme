@@ -60,7 +60,6 @@ export class AnnouncementBar extends Component {
     );
 
     this.refs.slides?.forEach((slide) => {
-      console.log(slide);
       slide.setAttribute("aria-hidden", "false");
     });
   }
