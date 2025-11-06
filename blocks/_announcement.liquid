@@ -1,8 +1,5 @@
-
-
 {%- assign block_settings = block.settings -%}
 {%- assign plain_text = block_settings.text | strip_newlines | strip_html | strip -%}
-{%- assign block_index = section.blocks | find_index: 'id', block.id -%}
 
 {%- unless plain_text == '' -%}
   <slideshow-slide
@@ -11,7 +8,6 @@
       announcement-bar__slide
       text-block
       text-block--{{ block.id }}
-      text-block--align-center
       text-block--full-width
       custom-typography
       {% if block_settings.font_size != "" %}custom-font-size{% endif %}
@@ -20,30 +16,41 @@
     style="
       {% render 'typography-style', settings: block_settings, preset: 'custom' %}
       --width: 100%;
-      --text-align: center;
+      --text-align: left;
       --line-height: 1;
+      --font-paragraph--spacing: 0;
     "
     {{ block.shopify_attributes }}
-    aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
+    aria-hidden="true"
   >
-    <p class="announcement-bar__text">
-      {{ block.settings.text }}
-    </p>
-
-    {% if block_settings.link != blank %}
-      <a
-        class="announcement-bar__link"
-        href="{{ block_settings.link }}"
-      >
-        <span class="visually-hidden">
-          {{ block_settings.text | strip_html }}
-        </span>
-      </a>
-    {% endif %}
+    <div class="announcement-bar__content">
+      {% if block.settings.icon %}
+        {% render 'fa-icon', icon: block.settings.icon, color: section.settings.color %}
+      {% endif %}
+      <p class="announcement-bar__text">
+        {{ block.settings.text }}
+      </p>
+      {% if block_settings.link != blank %}
+        <a
+          class="announcement-bar__link"
+          href="{{ block_settings.link }}"
+        >
+          <span class="visually-hidden">
+            {{ block_settings.text | strip_html }}
+          </span>
+        </a>
+      {% endif %}
+    </div>
   </slideshow-slide>
 {%- endunless -%}
 
 {% stylesheet %}
+  .announcement-bar__content {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: center;
+  }
   .text-block {
     width: var(--width);
     max-width: 100%;
@@ -53,6 +60,7 @@
     width: var(--width);
     max-width: var(--max-width, 100%);
     text-align: var(--text-align);
+    margin: 0;
   }
 
   .text-block:not(.text-block--full-width).rte,
@@ -168,6 +176,23 @@
         }
       ],
       "default": "var(--font-body--family)"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "", "label": "No icon" },
+        { "value": "fa-solid fa-heart", "label": "Heart" },
+        { "value": "fa-solid fa-cart-shopping", "label": "Cart" },
+        { "value": "fa-solid fa-tag", "label": "Tag" },
+        { "value": "fa-solid fa-fire", "label": "Fire" },
+        { "value": "fa-solid fa-star", "label": "Star" },
+        { "value": "fa-solid fa-plane-arrival", "label": "Plane Arrival" },
+        { "value": "fa-solid fa-newspaper", "label": "Newspaper" },
+        { "value": "fa-solid fa-inbox", "label": "Inbox" }
+      ],
+      "default": ""
     },
     {
       "type": "select",
