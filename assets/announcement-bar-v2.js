@@ -40,6 +40,7 @@ export class AnnouncementBar extends Component {
       this.#disable();
     } else {
       this.#enable();
+      this.#updateSlideVisibility();
     }
   };
 
@@ -147,8 +148,18 @@ export class AnnouncementBar extends Component {
       relativeIndex += (this.refs.slides ?? []).length;
     }
 
+    this.#updateSlideVisibility(relativeIndex);
+  }
+
+  #updateSlideVisibility(relativeIndex = this.#current) {
+    const isMobile = !this.#mediaQuery.matches;
+
     this.refs.slides?.forEach((slide, index) => {
-      slide.setAttribute("aria-hidden", `${index !== relativeIndex}`);
+      if (isMobile) {
+        slide.setAttribute("aria-hidden", `${index !== relativeIndex}`);
+      } else {
+        slide.setAttribute("aria-hidden", "false");
+      }
     });
   }
 
