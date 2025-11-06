@@ -1,0 +1,14 @@
+{%- doc -%}
+  Used to display the settings icon.
+
+  @param {string} icon - An array of HTML strings for the product list items
+  @param {string} color - A color for icon
+
+  @example
+  {% render 'fa-icon', icon: icon, color: color %}
+{%- enddoc -%}
+
+<i
+  class="{{ icon }}"
+  style="{% if color %}color: {{ color }};{% endif %};"
+></i>

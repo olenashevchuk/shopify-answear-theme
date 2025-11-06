@@ -18,56 +18,52 @@
           "type": "_announcement",
           "settings": {
             "text": "Free shipping!",
-            "color": "#BA4848",
-            "background": "#C2C2C2",
             "link": "",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "weight": "",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "none",
+            "icon": "fa-solid fa-cart-shopping"
           }
         },
         "announcement_2": {
           "type": "_announcement",
           "settings": {
             "text": "Winter Sale - Up to 30% Off!",
-            "color": "#FAFF53",
-            "background": "#0F34AE",
             "link": "",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "weight": "",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "none",
+            "icon": "fa-solid fa-fire"
           }
         },
         "announcement_3": {
           "type": "_announcement",
           "settings": {
             "text": "New Arrivals Just In!",
-            "color": "#068C39",
-            "background": "#DCFFE7",
             "link": "",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "weight": "",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "none",
+            "icon": "fa-solid fa-plane-arrival"
           }
         },
         "announcement_4": {
           "type": "_announcement",
           "settings": {
             "text": "Subscribe to our Newsletter",
-            "color": "#fff",
-            "background": "#600000",
             "link": "",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "weight": "",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "none",
+            "icon": "fa-solid fa-newspaper"
           }
         }
       },
@@ -79,7 +75,8 @@
       ],
       "name": "t:names.announcement_bar",
       "settings": {
-        "background": "red",
+        "background": "#CE5C00",
+        "color": "#fff",
         "speed": 5,
         "section_width": "page-width",
         "color_scheme": "scheme-1",

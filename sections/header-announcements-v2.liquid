@@ -6,10 +6,14 @@
   ></script>
 {% endif %}
 
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <aside
   class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
-  style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
+  style="
+    {% render 'spacing-padding', settings: section.settings %};
+    --border-bottom-width: {{ section.settings.divider_width }}px;
+    --color: {{ section.settings.color }};
+    --background: {{ section.settings.background }};
+  "
 >
   {% liquid
     assign autoplay = false
@@ -39,6 +43,8 @@
 {% stylesheet %}
   .announcement-bar {
     border-block-end: var(--border-bottom-width) solid var(--color-border);
+    color: var(--color);
+    background-color: var(--background);
   }
 
   .announcement-bar__slider {
@@ -90,7 +96,7 @@
   }
 
   .announcement-bar__slider slideshow-arrows .slideshow-control {
-    color: var(--color-foreground);
+    color: var(--color);
   }
 
   .announcement-bar__slider .slideshow-control {
@@ -159,6 +165,8 @@
       "type": "header",
       "content": "t:content.appearance"
     },
+    { "type": "color", "id": "color", "label": "t:settings.color" },
+    { "type": "color", "id": "background", "label": "t:settings.background" },
     {
       "type": "select",
       "id": "section_width",
