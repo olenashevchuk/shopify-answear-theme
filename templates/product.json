@@ -158,18 +158,12 @@
                 "rating": {
                   "type": "rating",
                   "settings": {
-                    "show_rating": true,
-                    "stars_background": "#d27222",
-                    "show_number_of_rating": true
+                    "stars_background": "#d27222"
                   },
                   "blocks": {}
                 }
               },
-              "block_order": [
-                "text_xrnftG",
-                "price_tVjtKg",
-                "rating"
-              ]
+              "block_order": ["text_xrnftG", "price_tVjtKg", "rating"]
             },
             "divider_VJhene": {
               "type": "_divider",
@@ -387,6 +381,10 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "rating": {
+              "type": "rating",
+              "settings": {}
             }
           },
           "block_order": [
@@ -396,9 +394,7 @@
           ]
         }
       },
-      "block_order": [
-        "text_cbcgyb"
-      ],
+      "block_order": ["text_cbcgyb"],
       "name": "t:names.product_recommendations",
       "settings": {
         "product": "{{ closest.product }}",
@@ -420,8 +416,5 @@
       }
     }
   },
-  "order": [
-    "main",
-    "product_recommendations_qggXJq"
-  ]
+  "order": ["main", "product_recommendations_qggXJq"]
 }
