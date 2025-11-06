@@ -1,0 +1,46 @@
+{%- doc -%}
+  Used to display rating.
+
+  @param {number} rating - Rating value (can be float)
+  @param {string} stars_background - Color for icons
+  @param {number} stars_number - Number of stars to display
+
+  @example
+  {% render 'rating', rating: rating , stars_background: '#FFD700', stars_number: 5 %}
+{%- enddoc -%}
+{% assign full_stars = rating | floor %}
+{% assign has_half = rating | modulo: 1 %}
+
+<div class="stars-wrapper" style="display:inline-flex;gap:2px;">
+  {% for i in (1..stars_number) %}
+    {% assign next_star = full_stars | plus: 1 %}
+
+    {% if i <= full_stars %}
+      <!-- Full of star -->
+      <svg viewBox="0 0 32 32" width="16" height="16">
+        <path d="M28.61,11.67H20l-2.66-8.2a1.39,1.39,0,0,0-2.64,0L12,11.67H3.39a1.39,1.39,0,0,0-.82,2.51l7,5.07L6.89,27.46a1.39,1.39,0,0,0,1.32,1.82A1.43,1.43,0,0,0,9,29l7-5.07L23,29a1.43,1.43,0,0,0,.81.27,1.39,1.39,0,0,0,1.32-1.82l-2.66-8.21,7-5.07A1.39,1.39,0,0,0,28.61,11.67Z"
+          stroke="{{ stars_background }}" stroke-width="1.2" fill="{{ stars_background }}"/>
+      </svg>
+
+    {% elsif i == next_star and has_half >= 0.5 %}
+      <!-- Half of star -->
+      <svg viewBox="0 0 32 32" width="16" height="16">
+        <defs>
+          <linearGradient id="half-star-{{ i }}" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="50%" stop-color="{{ stars_background }}" />
+            <stop offset="50%" stop-color="transparent" />
+          </linearGradient>
+        </defs>
+        <path d="M28.61,11.67H20l-2.66-8.2a1.39,1.39,0,0,0-2.64,0L12,11.67H3.39a1.39,1.39,0,0,0-.82,2.51l7,5.07L6.89,27.46a1.39,1.39,0,0,0,1.32,1.82A1.43,1.43,0,0,0,9,29l7-5.07L23,29a1.43,1.43,0,0,0,.81.27,1.39,1.39,0,0,0,1.32-1.82l-2.66-8.21,7-5.07A1.39,1.39,0,0,0,28.61,11.67Z"
+          stroke="{{ stars_background }}" stroke-width="1.2" fill="url(#half-star-{{ i }})"/>
+      </svg>
+
+    {% else %}
+      <!-- Empty star -->
+      <svg viewBox="0 0 32 32" width="16" height="16">
+        <path d="M28.61,11.67H20l-2.66-8.2a1.39,1.39,0,0,0-2.64,0L12,11.67H3.39a1.39,1.39,0,0,0-.82,2.51l7,5.07L6.89,27.46a1.39,1.39,0,0,0,1.32,1.82A1.43,1.43,0,0,0,9,29l7-5.07L23,29a1.43,1.43,0,0,0,.81.27,1.39,1.39,0,0,0,1.32-1.82l-2.66-8.21,7-5.07A1.39,1.39,0,0,0,28.61,11.67Z"
+          stroke="{{ stars_background }}" stroke-width="1.2" fill="none"/>
+      </svg>
+    {% endif %}
+  {% endfor %}
+</div>

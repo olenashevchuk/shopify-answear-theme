@@ -5,6 +5,7 @@
   @param {string} [fallback_text] - fallback text if settings.text does not exist
   @param {object} [block] - The block object
   @param {string} [width] - width of the text block
+  @param {number} [max_rows] - Max rows of text
 {%- enddoc -%}
 
 {% liquid
@@ -66,8 +67,13 @@
       --text-corner-radius: {{ block_settings.corner_radius }}px;
       --text-padding: max(var(--padding-2xs), calc((var(--text-corner-radius) + var(--padding-xs)) * (1 - cos(45deg))));
     {% endif %}
+    {% if max_rows %}
+      --max-rows: {{ max_rows }} 
+    {% endif %}
   "
-
+    {% if max_rows %}
+    data-max-rows="{{ max_rows }}"
+    {% endif %}
   {{ block.shopify_attributes }}
 {% endcapture %}
 {% liquid
@@ -214,5 +220,14 @@
   .custom-color,
   .custom-color > :is(h1, h2, h3, h4, h5, h6, p, *) {
     color: var(--color);
+  }
+  .text-block[data-max-rows],
+  .text-block[style='--max-rows'] > * {
+    display: -webkit-box;
+    -webkit-line-clamp: var(--max-rows, 1);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
   }
 {% endstylesheet %}
