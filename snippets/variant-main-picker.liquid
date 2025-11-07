@@ -53,9 +53,15 @@
               assign longest_value = 0
             endif
           endif
-        -%}
+          assign only_one_option = product_resource.options_with_values | size
 
-        {%- if variant_style == 'swatch' or block_settings.variant_style == 'buttons' -%}
+          if only_one_option == 1 and block_settings.variant_style == 'size-with-price'
+            assign render_buttons_variant = true
+          else
+            assign render_buttons_variant = false
+          endif
+        -%}
+        {%- if variant_style == 'swatch' or block_settings.variant_style == 'buttons' or render_buttons_variant -%}
           {%- assign fieldset_index = forloop.index0 -%}
           <fieldset
             class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
