@@ -190,6 +190,10 @@
               },
               "blocks": {}
             },
+            "care_instructions": {
+              "type": "care-instructions",
+              "blocks": {}
+            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -257,7 +261,8 @@
             "divider_VJhene",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
-            "text_aEtTtq"
+            "text_aEtTtq",
+            "care_instructions"
           ]
         }
       },
