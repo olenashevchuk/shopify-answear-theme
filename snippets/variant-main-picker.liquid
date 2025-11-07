@@ -262,7 +262,6 @@
                   <span class="variant-option__size-with-price-label__price">
                     {{ product_option_value.variant.price | money_with_currency -}}
                   </span>
-                  {% render 'strikethrough-variant', product_option: product_option_value %}
                 </label>
               {%- endfor -%}
               {% if option_id_attribute %}
@@ -486,11 +485,30 @@
     &:not(.variant-option__size-with-price-label--has-swatch):has([data-option-available='false']) {
       border-width: 0;
     }
-
+    &:not(.variant-option__size-with-price-label--has-swatch)::before,
+    &:has([data-option-available='false']):not(.variant-option__size-with-price-label--has-swatch)::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: var(--options-border-width) solid var(--color-selected-variant-border);
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 2;
+      /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+      clip-path: inset(var(--clip, 0 0 0 0));
+    }
+    &:has([data-option-available='false']):not(.variant-option__size-with-price-label--has-swatch)::before {
+      inset: 0;
+    }
     &:not(.variant-option__size-with-price-label--has-swatch)::before {
       clip-path: inset(0 0 0 0);
       border-color: var(--color-variant-border);
       inset: calc(var(--options-border-width) * -1);
+    }
+    &:has(:checked):not(.variant-option__size-with-price-label--has-swatch):not(
+        :has([data-option-available='false'])
+      )::before {
+      border-color: var(--color-selected-variant-border);
     }
 
     &:not(:has(:checked)):has(~ label > :checked),
@@ -501,11 +519,63 @@
       }
     }
 
+    &:has([data-previous-checked='true']) ~ label:has([data-current-checked='true']),
+    &:has(:checked) ~ label {
+      .variant-option__size-with-price-label__pill {
+        left: 0;
+        right: unset;
+      }
+    }
+
+    &:not(:has(:checked)):has(~ label > :checked) {
+      --pill-offset: calc(100% + 1px);
+    }
+
+    &:has(:checked) ~ label {
+      --pill-offset: calc(-100% - 1px);
+    }
+
+    &:has([data-current-checked='true']):first-of-type
+      ~ label:last-of-type:not(.variant-option__size-with-price-label--has-swatch),
+    &:not(:has(:checked)):has(~ label > :checked):not(.variant-option__size-with-price-label--has-swatch) {
+      --clip: 0 0 0 100%;
+    }
+
+    &:not(:has([data-current-checked='true'])):first-of-type:has(~ label:last-of-type > :checked):not(
+        .variant-option__size-with-price-label--has-swatch
+      ),
+    &:has(:checked) ~ label:not(.variant-option__size-with-price-label--has-swatch) {
+      --clip: 0 100% 0 0;
+    }
+
+    &:has([data-previous-checked='true'], [data-current-checked='true']) .variant-option__size-with-price-label__pill {
+      width: max(var(--pill-width-current, 100%), var(--pill-width-previous, 100%));
+    }
     @media screen and (min-width: 750px) {
       padding: var(--padding-xs) var(--variant-option-padding-inline);
     }
   }
+  .variant-option--size-with-price:has(:nth-of-type(3)) {
+    .variant-option__size-with-price-label:has([data-current-checked='true']):first-of-type ~ label:last-of-type {
+      --pill-offset: calc(100% + 1px);
+    }
+    .variant-option__size-with-price-label:not(:has([data-current-checked='true'])):first-of-type:has(
+        ~ label:last-of-type > :checked
+      ) {
+      --pill-offset: calc(-100% - 1px);
+    }
+  }
 
+  .variant-option__button-label__pill {
+    background: var(--color-selected-variant-background);
+    position: absolute;
+    top: calc(var(--options-border-width) * -1);
+    bottom: calc(var(--options-border-width) * -1);
+    border-radius: inherit;
+    pointer-events: none;
+    width: 100%;
+    transform: translateX(var(--pill-offset, 0));
+  }
   .variant-option__button-label {
     --variant-picker-stroke-color: var(--color-variant-border);
     cursor: pointer;
