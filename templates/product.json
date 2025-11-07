@@ -194,6 +194,10 @@
               "type": "care-instructions",
               "blocks": {}
             },
+            "estimated_delivery": {
+              "type": "estimated-delivery",
+              "blocks": {}
+            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -262,6 +266,7 @@
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
             "text_aEtTtq",
+            "estimated_delivery",
             "care_instructions"
           ]
         }
