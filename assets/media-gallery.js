@@ -57,6 +57,27 @@ export class MediaGallery extends Component {
     if (!newMediaGallery) return;
 
     this.replaceWith(newMediaGallery);
+
+    // Alternative option
+
+    // const variantName = event.detail.data.variantName.toLowerCase();
+
+    // if (variantName === "color") {
+    //   const selectedColor = event.detail.data.optionName.toLowerCase();
+
+    //   if (selectedColor) {
+    //     this.querySelectorAll("li[data-color]").forEach((li) => {
+    //       if (li instanceof HTMLElement)
+    //         if (li.dataset.color !== selectedColor) {
+    //           li.style.display = "none";
+    //           li.hidden = true;
+    //         } else {
+    //           li.style.display = "block";
+    //           li.hidden = false;
+    //         }
+    //     });
+    //   }
+    // }
   };
 
   /**
