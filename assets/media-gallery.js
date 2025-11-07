@@ -1,5 +1,9 @@
-import { Component } from '@theme/component';
-import { ThemeEvents, VariantUpdateEvent, ZoomMediaSelectedEvent } from '@theme/events';
+import { Component } from "@theme/component";
+import {
+  ThemeEvents,
+  VariantUpdateEvent,
+  ZoomMediaSelectedEvent,
+} from "@theme/events";
 
 /**
  * A custom element that renders a media gallery.
@@ -16,12 +20,20 @@ export class MediaGallery extends Component {
     super.connectedCallback();
 
     const { signal } = this.#controller;
-    const target = this.closest('.shopify-section, dialog');
+    const target = this.closest(".shopify-section, dialog");
 
-    target?.addEventListener(ThemeEvents.variantUpdate, this.#handleVariantUpdate, { signal });
-    this.refs.zoomDialogComponent?.addEventListener(ThemeEvents.zoomMediaSelected, this.#handleZoomMediaSelected, {
-      signal,
-    });
+    target?.addEventListener(
+      ThemeEvents.variantUpdate,
+      this.#handleVariantUpdate,
+      { signal },
+    );
+    this.refs.zoomDialogComponent?.addEventListener(
+      ThemeEvents.zoomMediaSelected,
+      this.#handleZoomMediaSelected,
+      {
+        signal,
+      },
+    );
   }
 
   #controller = new AbortController();
@@ -39,13 +51,33 @@ export class MediaGallery extends Component {
    */
   #handleVariantUpdate = (event) => {
     const source = event.detail.data.html;
-
     if (!source) return;
-    const newMediaGallery = source.querySelector('media-gallery');
+    const newMediaGallery = source.querySelector("media-gallery");
 
     if (!newMediaGallery) return;
 
     this.replaceWith(newMediaGallery);
+
+    // Alternative option
+
+    // const variantName = event.detail.data.variantName.toLowerCase();
+
+    // if (variantName === "color") {
+    //   const selectedColor = event.detail.data.optionName.toLowerCase();
+
+    //   if (selectedColor) {
+    //     this.querySelectorAll("li[data-color]").forEach((li) => {
+    //       if (li instanceof HTMLElement)
+    //         if (li.dataset.color !== selectedColor) {
+    //           li.style.display = "none";
+    //           li.hidden = true;
+    //         } else {
+    //           li.style.display = "block";
+    //           li.hidden = false;
+    //         }
+    //     });
+    //   }
+    // }
   };
 
   /**
@@ -79,6 +111,6 @@ export class MediaGallery extends Component {
   }
 }
 
-if (!customElements.get('media-gallery')) {
-  customElements.define('media-gallery', MediaGallery);
+if (!customElements.get("media-gallery")) {
+  customElements.define("media-gallery", MediaGallery);
 }

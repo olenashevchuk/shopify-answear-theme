@@ -84,11 +84,6 @@ export default class VariantPicker extends Component {
     this.fetchUpdatedSection(
       this.buildRequestUrl(selectedOption),
       loadsNewProduct,
-      // Alternative option
-      // {
-      //   optionName: selectedOption.dataset.optionName,
-      //   variantName: selectedOption.dataset.variantName,
-      // },
     );
 
     const url = new URL(window.location.href);
@@ -250,16 +245,9 @@ export default class VariantPicker extends Component {
   /**
    * Fetches the updated section.
    * @param {string} requestUrl - The request URL.
-   * @param {boolean} [shouldMorphMain=false] - If the entire main content should be morphed. By default, only the variant picker is morphed.
-   * @param {Object} [data={}] - Additional data about the selected option.
-   * @param {string} [data.variantName=""] - The variant name (like "Color", "Size")
-   * @param {string} [data.optionName=""] - The option name (like "White", "Red", "Black")
+   * @param {boolean} shouldMorphMain - If the entire main content should be morphed. By default, only the variant picker is morphed.
    */
-  fetchUpdatedSection(
-    requestUrl,
-    shouldMorphMain = false,
-    { variantName = "", optionName = "" } = {},
-  ) {
+  fetchUpdatedSection(requestUrl, shouldMorphMain = false) {
     // We use this to abort the previous fetch request if it's still pending.
     this.#abortController?.abort();
     this.#abortController = new AbortController();
@@ -292,8 +280,6 @@ export default class VariantPicker extends Component {
                   html,
                   productId: this.dataset.productId ?? "",
                   newProduct,
-                  variantName,
-                  optionName,
                 },
               ),
             );

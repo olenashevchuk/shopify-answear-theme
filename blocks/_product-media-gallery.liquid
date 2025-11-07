@@ -1,5 +1,3 @@
-
-
 {% assign block_settings = block.settings %}
 
 {%- if block_settings.zoom -%}
@@ -367,6 +365,24 @@
     {% endcapture %}
   {% endif %}
 
+  {% assign selected_variant = product.selected_or_first_available_variant %}
+  {% assign selected_variant = product.selected_or_first_available_variant %}
+
+  {% assign selected_color = '' %}
+  {% for option in product.options_with_values %}
+    {% if option.name == 'Color' %}
+      {% assign color_index = forloop.index0 %}
+    {% endif %}
+  {% endfor %}
+  {% if color_index != blank %}
+    {% assign selected_color = selected_variant.options[color_index] | downcase %}
+  {% endif %}
+  {% if selected_color != blank %}
+    {% assign filtered_media = sorted_media | where: 'alt', selected_color %}
+  {% else %}
+    {% assign filtered_media = sorted_media %}
+  {% endif %}
+
   {% render 'slideshow',
     ref: 'slideshow',
     class: slideshow_class,
@@ -382,7 +398,7 @@
       class="media-gallery__grid list-unstyled"
       data-testid="media-gallery-grid"
     >
-      {% for media in sorted_media %}
+      {% for media in filtered_media %}
         <li
           ref="media[]"
           class="{{ product_media_container_class }} product-media-container--{{ media.media_type }}"
@@ -444,8 +460,8 @@
             class="dialog-thumbnails-list list-unstyled"
             ref="thumbnails"
           >
-            {% if sorted_media.size > 1 %}
-              {%- for media in sorted_media -%}
+            {% if filtered_media.size > 1 %}
+              {%- for media in filtered_media -%}
                 {% liquid
                   assign aspect_ratio = block_settings.aspect_ratio
                   if block_settings.aspect_ratio == 'adapt'
@@ -488,7 +504,7 @@
         <ul
           class="dialog-zoomed-gallery list-unstyled"
         >
-          {%- for media in sorted_media -%}
+          {%- for media in filtered_media -%}
             <li
               id="product-{{ media.id}}-{{ forloop.index }}"
               class="{{ product_media_container_class | remove: 'media-fit-cover' }} product-media-container--{{ media.media_type }}{% if media.media_type == 'image' %} product-media-container--zoomable{% endif %}"
@@ -942,8 +958,8 @@
     {
       "type": "checkbox",
       "id": "hide_variants",
-      "default": false,
-      "label": "t:settings.hide_unselected_variant_media"
+      "label": "t:settings.hide_unselected_variant_media",
+      "default": false
     },
     {
       "type": "header",
