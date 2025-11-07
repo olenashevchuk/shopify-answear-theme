@@ -1,0 +1,35 @@
+{% assign delivery_days = 5 %}
+{% assign now_seconds = 'now' | date: '%s' %}
+{% assign delivery_days_milliseconds = delivery_days | times: 86400 %}
+{% assign delivery_date = now_seconds | plus: delivery_days_milliseconds | date: '%B %d, %Y' %}
+
+<div class="estimated-delivery">
+  {% render 'fa-icon', icon: 'fa-solid fa-truck-fast', color: '#007bff' %}
+
+  <span class="estimated-delivery__label">Estimated delivery:</span>
+  <span>{{ delivery_date }}</span>
+</div>
+
+{% schema %}
+{
+  "name": "Estimated delivery",
+  "tag": null
+}
+{% endschema %}
+
+{% stylesheet %}
+  .estimated-delivery {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    background: #f9fcf4;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #5fa501;
+  }
+
+  .estimated-delivery__label {
+    font-weight: 600;
+  }
+{% endstylesheet %}
