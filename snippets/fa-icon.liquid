@@ -2,7 +2,7 @@
   Used to display the settings icon.
 
   @param {string} icon - An array of HTML strings for the product list items
-  @param {string} color - A color for icon
+  @param {string} [color] - A color for icon
 
   @example
   {% render 'fa-icon', icon: icon, color: color %}
@@ -10,5 +10,5 @@
 
 <i
   class="{{ icon }}"
-  style="{% if color %}color: {{ color }};{% endif %};"
+  style="{% if color %}color: {{ color  | default: '#000000' }};{% endif %};"
 ></i>

@@ -511,11 +511,6 @@
       border-color: var(--color-variant-border);
       inset: calc(var(--options-border-width) * -1);
     }
-    &:has(:checked):not(.variant-option__size-with-price-label--has-swatch):not(
-        :has([data-option-available='false'])
-      )::before {
-      border-color: var(--color-selected-variant-border);
-    }
 
     &:not(:has(:checked)):has(~ label > :checked),
     &:has(:checked):has(~ label > [data-previous-checked='true']) {
@@ -776,12 +771,13 @@
   }
 
   .variant-option__size-with-price-label:has(:checked) {
-    border-color: rgb(from var(--color-selected-variant-border) r g b / 0.2);
+    border-color: rgb(from var(--color-selected-variant-border) r g b / 0.1);
     background-color: rgb(from var(--color-selected-variant-background) r g b / 0.1);
+    transition: background-color var(--animation-speed) var(--animation-easing);
   }
 
   .variant-option__size-with-price-label:has(:checked):hover {
-    border-color: rgb(from var(--color-selected-variant-border) r g b / 0.3);
+    border-color: rgb(from var(--color-selected-variant-border) r g b / 0.2);
     background-color: rgb(from var(--color-selected-variant-background) r g b / 0.2);
   }
 

@@ -1,0 +1,69 @@
+{% liquid
+  assign product = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{% if product.metafields.custom.care_instructions.value %}
+  <div class="care-instructions">
+    <ul>
+      {% for instruction in product.metafields.custom.care_instructions.value %}
+        {% if instruction %}
+          <li class="care-instruction">
+            {% if instruction.icon %}
+              <div class="icon-wrapper">
+                {% render 'fa-icon', icon: instruction.icon %}
+              </div>
+            {% endif %}
+            <div>
+              <h5>{{ instruction.name }}</h5>
+              {% if instruction.description %}
+                <p class="description">{{ instruction.description }}</p>
+              {% endif %}
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .care-instructions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .care-instruction {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 4px;
+    background-color: #f9f9f9;
+    padding: 8px;
+    border-radius: 16px;
+    min-height: 82px;
+    align-items: center;
+  }
+  .care-instruction .icon-wrapper {
+    width: 20px;
+  }
+
+  .care-instruction h5 {
+    margin: 0;
+    margin-bottom: 4px;
+  }
+  .care-instruction .description {
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Care instructions",
+  "tag": null
+}
+{% endschema %}
