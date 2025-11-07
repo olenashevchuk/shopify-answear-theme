@@ -80,8 +80,9 @@ export class VariantUpdateEvent extends Event {
         html: data.html,
         productId: data.productId,
         newProduct: data.newProduct,
-        variantName: data.variantName,
-        optionName: data.optionName,
+        // Alternative option
+        // variantName: data.variantName,
+        // optionName: data.optionName,
       },
     };
   }
