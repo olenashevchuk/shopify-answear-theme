@@ -1,0 +1,175 @@
+{% liquid
+  capture styles
+    echo '--column-count-mobile: ' | append: section.settings.mobile_columns | append: ';'
+    echo '--resource-list-column-gap-desktop: ' | append: section.settings.columns_gap | append: 'px;'
+    echo '--resource-list-row-gap-desktop: ' | append: section.settings.rows_gap | append: 'px;'
+    echo '--resource-list-columns: repeat(' | append: section.settings.columns | append: ', 1fr);'
+    echo '--resource-list-columns-mobile: repeat(' | append: section.settings.mobile_columns | append: ', 1fr);'
+    echo '--resource-list-column-gap-desktop: ' | append: section.settings.columns_gap | append: 'px;'
+    echo '--column-count: ' | append: section.settings.columns | append: ';'
+    echo '--column-count-mobile: ' | append: section.settings.mobile_columns | append: ';'
+  endcapture
+%}
+{% capture description_tab %}
+Description|{{ product.description }}|fa-solid fa-info-circle
+{% endcapture %}
+
+{% capture downloads_tab %}
+Downloads|
+<ul>
+{% for file in product.metafields.custom.downloads.value %}
+  <li>
+    <a href="{{ file.url }}" download>{{ file.url  }}</a>
+  </li>
+{% endfor %}
+</ul>
+|fa-solid fa-download
+{% endcapture %}
+
+{% capture delivery_tab %}
+  Delivery|
+{% if shop.metafields.custom.delivery_info != blank %}
+  <div class="delivery-section">
+    {{ shop.metafields.custom.delivery_info| metafield_tag  }}
+  </div>
+{% endif %}
+|fa-solid fa-shipping-fast
+{% endcapture %}
+
+{% capture all_tabs %}
+{{ description_tab }}||TAB||{{ downloads_tab }}||TAB||{{delivery_tab}}
+{% endcapture %}
+
+{% assign tabs = all_tabs | split: '||TAB||' %}
+
+<div
+  class="
+    section
+    section--page-width
+    section-resource-list
+    spacing-style
+    gap-style
+  "
+  style="
+    {%  render 'spacing-style', settings: section.settings %}
+    {%  render 'gap-style', value: section.settings.gap %}
+    {{ styles }}
+  "
+>
+  {% render 'tabs', tabs: tabs %}
+</div>
+
+{% stylesheet %}
+  .delivery-section ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .delivery-section li {
+    margin-bottom: 5px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.product_recommendations",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "icon"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "video"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "spacer"
+    },
+    {
+      "type": "_divider"
+    }
+  ],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:settings.product"
+    },
+    {
+      "type": "header",
+      "content": "t:content.section_layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.product_recommendations",
+      "category": "t:categories.products",
+      "settings": {
+        "product": "{{ closest.product }}",
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 0
+      }
+    }
+  ]
+}
+{% endschema %}

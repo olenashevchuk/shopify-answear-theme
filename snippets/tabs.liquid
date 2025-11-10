@@ -1,0 +1,104 @@
+<div class="product-tabs">
+  <div class="tabs-header">
+    {%- for tab in tabs -%}
+      {% assign parts = tab | split: '|' %}
+      {% assign tab_title = parts[0] %}
+      {% assign tab_icon = parts[2] %}
+      <div class="tab {% if forloop.first %}active{% endif %}" data-tab="{{ forloop.index0 }}">
+        <button class="tab-button">
+          {{ tab_title }}
+        </button>
+        <span class="tab-icon">
+          {% render 'fa-icon', icon: tab_icon %}
+        </span>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div class="tabs-content">
+    {%- for tab in tabs -%}
+      {% assign parts = tab | split: '|' %}
+      {% assign tab_content = parts[1] %}
+      <div id="tab-{{ forloop.index0 }}" class="tab-content {% if forloop.first %}active{% endif %}">
+        {{ tab_content }}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-tabs {
+    font-family: Arial, sans-serif;
+  }
+
+  .tabs-header {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 1rem;
+  }
+
+  .tab {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s;
+  }
+
+  .tab-button {
+    background: none;
+    border: none;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    font-size: 16px;
+    transition: color 0.3s;
+    cursor: pointer;
+  }
+
+  .tab-icon {
+    margin-left: 0.5rem;
+    transition: color 0.3s;
+  }
+
+  .tab.active {
+    border-bottom: 3px solid #007bff;
+  }
+  .tab.active i {
+    color: #007bff !important;
+  }
+
+  .tab.active .tab-button,
+  .tab.active .tab-icon {
+    color: #007bff;
+  }
+
+  .tabs-content .tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .tabs-content .tab-content.active {
+    display: block;
+    opacity: 1;
+  }
+{% endstylesheet %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', function () {
+        const target = this.getAttribute('data-tab');
+
+        tabs.forEach((t) => t.classList.remove('active'));
+        contents.forEach((c) => c.classList.remove('active'));
+
+        this.classList.add('active');
+        document.getElementById('tab-' + target).classList.add('active');
+      });
+    });
+  });
+</script>
