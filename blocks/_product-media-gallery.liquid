@@ -9,12 +9,11 @@
 
 {%- liquid
   assign selected_product = closest.product
-  assign selected_variant_media = selected_product.selected_or_first_available_variant.featured_media
-  assign first_3d_model = selected_product.media | where: 'media_type', 'model' | first
+  assign selected_variant = selected_product.selected_or_first_available_variant
+  assign selected_variant_media = selected_variant.featured_media
+  assign selected_variant_custom_gallery = selected_variant.metafields.custom.gallery_images
 
-  if block_settings.hide_variants
-    assign variant_images = selected_product.images | where: 'attached_to_variant?', true | map: 'src'
-  endif
+  assign first_3d_model = selected_product.media | where: 'media_type', 'model' | first
 
   if block_settings.slideshow_controls_style == 'thumbnails'
     assign controls_on_media = false
@@ -81,19 +80,10 @@
 
 {%- liquid
   assign sorted_media = '' | split: ','
-  if selected_variant_media
-    assign sorted_media = sorted_media | concat: selected_product.media | where: 'id', selected_variant_media.id
-
-    for media in selected_product.media
-      if block_settings.hide_variants and variant_images contains media.src and sorted_media.size > 0
-        continue
-      endif
-
-      if media.id != selected_variant_media.id
-        assign found_media = selected_product.media | where: 'id', media.id
-        assign sorted_media = sorted_media | concat: found_media
-      endif
-    endfor
+  if selected_variant_custom_gallery and selected_variant_custom_gallery.value and selected_variant_custom_gallery.value.size > 0
+    assign sorted_media = selected_variant_custom_gallery.value
+  elsif selected_variant_media
+    assign sorted_media = selected_product.media | where: 'id', selected_variant_media.id
   else
     assign sorted_media = selected_product.media
   endif
@@ -365,24 +355,6 @@
     {% endcapture %}
   {% endif %}
 
-  {% assign selected_variant = product.selected_or_first_available_variant %}
-  {% assign selected_variant = product.selected_or_first_available_variant %}
-
-  {% assign selected_color = '' %}
-  {% for option in product.options_with_values %}
-    {% if option.name == 'Color' %}
-      {% assign color_index = forloop.index0 %}
-    {% endif %}
-  {% endfor %}
-  {% if color_index != blank %}
-    {% assign selected_color = selected_variant.options[color_index] | downcase %}
-  {% endif %}
-  {% if selected_color != blank %}
-    {% assign filtered_media = sorted_media | where: 'alt', selected_color %}
-  {% else %}
-    {% assign filtered_media = sorted_media %}
-  {% endif %}
-
   {% render 'slideshow',
     ref: 'slideshow',
     class: slideshow_class,
@@ -398,7 +370,7 @@
       class="media-gallery__grid list-unstyled"
       data-testid="media-gallery-grid"
     >
-      {% for media in filtered_media %}
+      {% for media in sorted_media %}
         <li
           ref="media[]"
           class="{{ product_media_container_class }} product-media-container--{{ media.media_type }}"
@@ -460,8 +432,8 @@
             class="dialog-thumbnails-list list-unstyled"
             ref="thumbnails"
           >
-            {% if filtered_media.size > 1 %}
-              {%- for media in filtered_media -%}
+            {% if sorted_media.size > 1 %}
+              {%- for media in sorted_media -%}
                 {% liquid
                   assign aspect_ratio = block_settings.aspect_ratio
                   if block_settings.aspect_ratio == 'adapt'
@@ -504,7 +476,7 @@
         <ul
           class="dialog-zoomed-gallery list-unstyled"
         >
-          {%- for media in filtered_media -%}
+          {%- for media in sorted_media -%}
             <li
               id="product-{{ media.id}}-{{ forloop.index }}"
               class="{{ product_media_container_class | remove: 'media-fit-cover' }} product-media-container--{{ media.media_type }}{% if media.media_type == 'image' %} product-media-container--zoomable{% endif %}"
