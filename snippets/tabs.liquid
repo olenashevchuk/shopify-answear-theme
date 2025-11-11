@@ -33,7 +33,7 @@
 
   .tabs-header {
     display: flex;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 1px solid #ddd;
     margin-bottom: 1rem;
   }
 
@@ -42,7 +42,7 @@
     align-items: center;
     padding: 0 1rem;
     cursor: pointer;
-    border-bottom: 3px solid transparent;
+    border-bottom: 1px solid transparent;
     transition: border-color 0.3s;
   }
 
@@ -61,8 +61,19 @@
   }
 
   .tab.active {
-    border-bottom: 3px solid #007bff;
+    position: relative;
   }
+
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #007bff;
+  }
+
   .tab.active i {
     color: #007bff !important;
   }
