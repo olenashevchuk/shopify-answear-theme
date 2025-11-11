@@ -1,0 +1,201 @@
+{% liquid
+  capture styles
+    echo '--column-count-mobile: ' | append: section.settings.mobile_columns | append: ';'
+    echo '--resource-list-column-gap-desktop: ' | append: section.settings.columns_gap | append: 'px;'
+    echo '--resource-list-row-gap-desktop: ' | append: section.settings.rows_gap | append: 'px;'
+    echo '--resource-list-columns: repeat(' | append: section.settings.columns | append: ', 1fr);'
+    echo '--resource-list-columns-mobile: repeat(' | append: section.settings.mobile_columns | append: ', 1fr);'
+    echo '--resource-list-column-gap-desktop: ' | append: section.settings.columns_gap | append: 'px;'
+    echo '--column-count: ' | append: section.settings.columns | append: ';'
+    echo '--column-count-mobile: ' | append: section.settings.mobile_columns | append: ';'
+  endcapture
+%}
+{% schema %}
+{
+  "name": "Recently viewed products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:names.header",
+      "default": "<h3>Recently viewed</h3>"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "t:settings.product_count",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "t:settings.columns",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "t:settings.mobile_columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:options.one_number"
+        },
+        {
+          "value": "2",
+          "label": "t:options.two_number"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "t:settings.horizontal_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "rows_gap",
+      "label": "t:settings.vertical_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ]
+}
+{% endschema %}
+<div
+  class="
+    section
+    color-{{ section.settings.color_scheme }}
+    section-resource-list
+    spacing-style
+    gap-style
+  "
+  style="
+    {%  render 'spacing-style', settings: section.settings %}
+    {%  render 'gap-style', value: section.settings.gap %}
+    {{ styles }}
+  "
+  id="recently-viewed-section"
+>
+  <div id="recently-viewed">
+    <h4>{{ section.settings.title }}</h4>
+    <div class="resource-list resource-list--grid" id="recently-viewed-products"></div>
+  </div>
+</div>
+
+<script>
+  async function renderRecentlyViewed(section) {
+    const storageKey = "recently_viewed_products";
+    const max = {{ section.settings.max_products }};
+    const container = section.querySelector("#recently-viewed-products");
+    const viewed = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+    if (!viewed.length) {
+      document.querySelector("#recently-viewed-section").style.display = "none";
+      return;
+    }
+
+    const handles = viewed.slice(0, max).map(handle => handle);
+    const products = [];
+
+    for (const handle of handles) {
+      try {
+        const res = await fetch(`/products/${handle}.js`);
+        const data = await res.json();
+        products.push(data);
+      } catch(e) {}
+    }
+
+    if (!products.length) {
+      section.style.display = "none";
+      return;
+    }
+
+    container.innerHTML = products.map(p => `
+      <div class="resource-list__item" data-handle="${p.handle}">
+        <a href="${p.url}" class="product-card">
+          <img src="${p.featured_image}" alt="${p.title}">
+          <p>${p.title}</p>
+          <h6>$${(p.price/100).toFixed(2)}</h6>
+        </a>
+      </div>
+    `).join('');
+
+    section.style.display = "block";
+  }
+
+  const section = document.getElementById("recently-viewed");
+  if (section) renderRecentlyViewed(section);
+
+  document.addEventListener('shopify:section:load', event => {
+    const section = event.target.querySelector("#recently-viewed");
+    if (section) renderRecentlyViewed(section);
+  });
+</script>
+
+<style>
+  #recently-viewed-products .product-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #recently-viewed-products .product-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 8px;
+  }
+
+  #recently-viewed-products .product-card p {
+    display: -webkit-box;
+    -webkit-line-clamp: var(--max-rows, 1);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    margin: 0;
+  }
+  #recently-viewed-products .product-card h6 {
+    margin: 0;
+  }
+</style>
