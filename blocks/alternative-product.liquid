@@ -6,7 +6,7 @@
   <img
     src="{{ image | image_url: original }}"
     alt="{{ alt_product.title }}"
-    style="width: {% if block.settings.image_width %}{{ block.settings.image_width }}{% else %}100%{% endif %}; height: auto;"
+    style="object-fit: contain; width: {% if block.settings.image_width %}{{ block.settings.image_width }}{% else %}100%{% endif %}; height:  {% if block.settings.image_height %}{{ block.settings.image_height }}{% else %}100%{% endif %};"
   >
 
   <h5 class="product-title">
@@ -101,6 +101,12 @@
       "id": "image_width",
       "label": "Image width",
       "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "image_height",
+      "label": "Image height",
+      "default": "300px"
     }
   ],
   "presets": [{ "name": "Alternative product" }]
