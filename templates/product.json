@@ -259,7 +259,7 @@
       "type": "tabs-and-alternative-product",
       "settings": {
         "padding-block-start": 48,
-        "padding-block-end": 0
+        "padding-block-end": 48
       }
     },
     "recently-viewed-products": {

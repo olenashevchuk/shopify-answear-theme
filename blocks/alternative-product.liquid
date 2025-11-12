@@ -1,85 +1,87 @@
 {% assign alt_product = product.metafields.custom.alternative_product.value %}
-{% assign image = alt_product.featured_image %}
 
-<h4>{{ block.settings.title }}</h4>
-<div class="alternative-product" style="gap: {{ block.settings.gap_size }}px;">
-  <img
-    src="{{ image | image_url: original }}"
-    alt="{{ alt_product.title }}"
-    style="object-fit: contain; width: {% if block.settings.image_width %}{{ block.settings.image_width }}{% else %}100%{% endif %}; height:  {% if block.settings.image_height %}{{ block.settings.image_height }}{% else %}100%{% endif %};"
-  >
+{% if alt_product %}
+  {% assign image = alt_product.featured_image %}
 
-  <h5 class="product-title">
-    <a href="{{ alt_product.url }}" class="link">{{ alt_product.title }}</a>
-  </h5>
-
-  <h6 class="product-price">{{ alt_product.price | money }}</h6>
-
-  <div class="product-action-row">
-    {% if alt_product.variants.size > 1 %}
-      <select name="variant_select" class="custom-select" id="alt-product-select-{{ section.id }}">
-        {% for variant in alt_product.variants %}
-          <option value="{{ variant.id }}">{{ variant.title }} – {{ variant.price | money }}</option>
-        {% endfor %}
-      </select>
-    {% endif %}
-
-    <button
-      data-product-id="{{ alt_product.id }}"
-      class="button add-to-cart-btn"
-      data-section-id="{{ section.id }}"
+  <h4>{{ block.settings.title }}</h4>
+  <div class="alternative-product" style="gap: {{ block.settings.gap_size }}px;">
+    <img
+      src="{{ image | image_url: original }}"
+      alt="{{ alt_product.title }}"
+      style="object-fit: contain; width: {% if block.settings.image_width %}{{ block.settings.image_width }}{% else %}100%{% endif %}; height:  {% if block.settings.image_height %}{{ block.settings.image_height }}{% else %}100%{% endif %};"
     >
-      <span class="add-to-cart-text"> Add to cart</span>
-    </button>
+
+    <h5 class="product-title">
+      <a href="{{ alt_product.url }}" class="link">{{ alt_product.title }}</a>
+    </h5>
+
+    <h6 class="product-price">{{ alt_product.price | money }}</h6>
+
+    <div class="product-action-row">
+      {% if alt_product.variants.size > 1 %}
+        <select name="variant_select" class="custom-select" id="alt-product-select-{{ section.id }}">
+          {% for variant in alt_product.variants %}
+            <option value="{{ variant.id }}">{{ variant.title }} – {{ variant.price | money }}</option>
+          {% endfor %}
+        </select>
+      {% endif %}
+
+      <button
+        data-product-id="{{ alt_product.id }}"
+        class="button add-to-cart-btn"
+        data-section-id="{{ section.id }}"
+      >
+        <span class="add-to-cart-text"> Add to cart</span>
+      </button>
+    </div>
   </div>
-</div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const button = document.querySelector('.add-to-cart-btn[data-section-id="{{ section.id }}"]');
-    if (!button) return;
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const button = document.querySelector('.add-to-cart-btn[data-section-id="{{ section.id }}"]');
+      if (!button) return;
 
-    const buttonTextElem = button.querySelector('.add-to-cart-text');
-    const select = document.getElementById('alt-product-select-{{ section.id }}');
-    let lastAddedVariantId = null;
+      const buttonTextElem = button.querySelector('.add-to-cart-text');
+      const select = document.getElementById('alt-product-select-{{ section.id }}');
+      let lastAddedVariantId = null;
 
-    button.addEventListener('click', async function() {
-      if (!select && button.disabled) return;
-      let variantId = select ? select.value : {{ alt_product.variants.first.id }};
+      button.addEventListener('click', async function() {
+        if (!select && button.disabled) return;
+        let variantId = select ? select.value : {{ alt_product.variants.first.id }};
 
-      try {
-        const addResponse = await fetch('/cart/add.js', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json','Accept': 'application/json'},
-          body: JSON.stringify({id: variantId, quantity: 1})
-        });
-        const addedItem = await addResponse.json();
+        try {
+          const addResponse = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json','Accept': 'application/json'},
+            body: JSON.stringify({id: variantId, quantity: 1})
+          });
+          const addedItem = await addResponse.json();
 
-        const cartResponse = await fetch('/cart.js');
-        const cart = await cartResponse.json();
-        const cartCountElem = document.querySelector('.cart-bubble__text');
-        if (cartCountElem) cartCountElem.textContent = cart.item_count;
+          const cartResponse = await fetch('/cart.js');
+          const cart = await cartResponse.json();
+          const cartCountElem = document.querySelector('.cart-bubble__text');
+          if (cartCountElem) cartCountElem.textContent = cart.item_count;
 
-        if (buttonTextElem) buttonTextElem.textContent = 'Added';
-        button.disabled = true;
-        lastAddedVariantId = variantId;
+          if (buttonTextElem) buttonTextElem.textContent = 'Added';
+          button.disabled = true;
+          lastAddedVariantId = variantId;
 
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-      }
-    });
-
-    if (select) {
-      select.addEventListener('change', function() {
-        if (lastAddedVariantId !== select.value) {
-          button.disabled = false;
-          if (buttonTextElem) buttonTextElem.textContent = 'Add to cart';
+        } catch (error) {
+          console.error('Error adding to cart:', error);
         }
       });
-    }
-  });
-</script>
 
+      if (select) {
+        select.addEventListener('change', function() {
+          if (lastAddedVariantId !== select.value) {
+            button.disabled = false;
+            if (buttonTextElem) buttonTextElem.textContent = 'Add to cart';
+          }
+        });
+      }
+    });
+  </script>
+{% endif %}
 {% schema %}
 {
   "name": "Alternative product",
