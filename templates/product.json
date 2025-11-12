@@ -255,16 +255,13 @@
         "padding-block-end": 0
       }
     },
-    "product-additional-information": {
-      "type": "product-additional-information",
+    "tabs-and-alternative-product": {
+      "type": "tabs-and-alternative-product",
       "settings": {
-        "product": "{{ closest.product }}",
-        "section_width": "page-width",
         "padding-block-start": 48,
         "padding-block-end": 48
       }
     },
-
     "recently-viewed-products": {
       "type": "recently-viewed-products",
       "settings": {
@@ -275,9 +272,5 @@
       }
     }
   },
-  "order": [
-    "main",
-    "product-additional-information",
-    "recently-viewed-products"
-  ]
+  "order": ["main", "tabs-and-alternative-product", "recently-viewed-products"]
 }
