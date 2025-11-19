@@ -80,8 +80,8 @@
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
     "blocks": {
-      "144831480468751239": {
-        "type": "shopify://apps/essential-upsell/blocks/app-embed/50627fd9-24fd-4250-8614-accc12826d80",
+      "14876220180117712452": {
+        "type": "shopify://apps/sea-post-purchase-survey/blocks/app-embed/c7c6d466-0f8e-412d-b0b9-db9b3387aa92",
         "disabled": false,
         "settings": {}
       }
